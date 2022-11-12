@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
-
+import jsQR from 'jsqr';
 import { captureVideo, createUserStream, getUserDevices } from '@/utils/userMedia';
 import useTimer from '@/utils/useTimer';
 
-type CameraProps = {
+type QrScannerProps = {
   speed: number,
-  onShot: (img: Blob) => void,
+  onDetect: (data: string) => void,
 };
 
-export default function Camera({ speed, onShot }: CameraProps) {
+export default function QrScanner({ speed, onDetect }: QrScannerProps) {
   const video = useRef<HTMLVideoElement>(null);
 
   // set Devices
@@ -26,8 +26,16 @@ export default function Camera({ speed, onShot }: CameraProps) {
 
   const takeShot = useCallback(() => {
     if (!video?.current || !selectedDevice) return;
-    const capture = captureVideo(video.current);
-    onShot(capture);
+    const image = captureVideo(video.current);
+    if (!image) return;
+    const code = jsQR(image.data, image.width, image.height, {
+      inversionAttempts: 'dontInvert',
+    });
+
+    if (code) {
+      console.log("Found QR code", code);
+      onDetect(code.data);
+    }
   }, [video, selectedDevice]);
   const [startShotTimer, stopShotTimer] = useTimer(takeShot, speed);
 

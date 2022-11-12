@@ -24,12 +24,12 @@ export const createUserStream = (kind: DeviceKind, device?: MediaDeviceInfo): Pr
   video: kind === 'videoinput',
 });
 
-export const captureVideo = (video: HTMLVideoElement) => {
+export const captureVideo = (video: HTMLVideoElement): ImageData => {
   const canvas = document.createElement('canvas');
   canvas.width = video.width || 640;
   canvas.height = video.height || 480;
   const context = canvas.getContext('2d');
   if (!context) throw new Error('cannot getContext from canvas');
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  return canvas.toDataURL('image/png');
-}
+  return context.getImageData(0, 0, canvas.width, canvas.height);
+};

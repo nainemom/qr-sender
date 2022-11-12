@@ -6,7 +6,7 @@ import { RouterProps } from 'preact-router';
 import { ab2str } from '@/utils/convert';
 import { Ref } from 'preact';
 import { createUserStream, getUserDevices } from '@/utils/userMedia';
-import Camera from '@/components/Camera';
+import QrScanner from '@/components/QrScanner';
 
 
 export default function Send(_props: RouterProps) {
@@ -58,9 +58,9 @@ export default function Send(_props: RouterProps) {
           )) }
         </select>
         <video ref={cameraRef} width="640" height="480" /> */}
-        <Camera
-          speed={1000}
-          onShot={console.log}
+        <QrScanner
+          speed={100}
+          onDetect={console.log}
         />
       </section>
 
