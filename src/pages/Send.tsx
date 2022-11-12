@@ -1,9 +1,7 @@
 import { useCallback, useState } from 'preact/hooks';
 import { RouterProps } from 'preact-router';
 
-import QrPlayer from '@/components/QrPlayer';
-
-const SEND_SPEED = 1000 / 12;
+import { QrPlayer } from '@/components/Qr';
 
 export default function Send(_props: RouterProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -30,16 +28,16 @@ export default function Send(_props: RouterProps) {
   return (
     <div>
       <section>
-        <h2>Generate QR Code</h2>
+        <h2>Send</h2>
         <input type="file" onInput={handleFileInput} />
         <button
           disabled={!selectedFileArrayBuffer || selectedFileArrayBuffer?.byteLength === 0}
           onClick={handlePlayButtonClick}
         >
-          Send
+          Play
         </button>
       </section>
-      <QrPlayer content={selectedFileArrayBuffer} sliceLength={32} speed={SEND_SPEED} started={isPlaying}/>
+      <QrPlayer content={selectedFileArrayBuffer} sliceLength={32} speed={500} started={isPlaying}/>
     </div>
   );
 }
