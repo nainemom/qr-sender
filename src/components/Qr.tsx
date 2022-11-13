@@ -77,10 +77,10 @@ export function QrPlayer({ speed, sliceLength, content, started }: QrPlayerProps
 
   return (
     <div style={{
-      border: 'solid 1px transparent',
-      borderColor: started ? 'green' : 'black',
-      width: '400px',
-      height: '400px',
+      border: 'solid 10px transparent',
+      width: '320px',
+      height: '320px',
+      boxSizing: 'border-box',
     }}>
       <img
         src={currentQrItem.url}
@@ -115,10 +115,9 @@ export function QrScanner({ speed, onDetect }: QrScannerProps) {
     if (!video?.current || !selectedDevice) return;
     const image = captureVideo(video.current);
     if (!image) return;
-    const data = scanQrCode(image);
-
-    if (data) {
-      try {
+    scanQrCode(image).then(({ data }) => {
+      console.log(data);
+      if (data) {
         let parsed = JSON.parse(data) as QrData;
         if (parsed.type === 'body') {
           if (!parsed.content) return;
@@ -128,8 +127,10 @@ export function QrScanner({ speed, onDetect }: QrScannerProps) {
           };
         }
         onDetect(parsed);
-      } catch (_e) {}
-    }
+      }
+    }).catch((e) => { console.log(e) });
+
+
   }, [video, selectedDevice]);
   const [startShotTimer, stopShotTimer] = useTimer(takeShot, speed);
 
