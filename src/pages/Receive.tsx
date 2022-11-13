@@ -18,13 +18,13 @@ export default function Send(_props: RouterProps) {
       <section style={{ maxWidth: '400px' }}>
         <h2>Receive</h2>
         <QrScanner
-          speed={100}
+          speed={250}
           onDetect={handleQrDetect}
         />
       </section>
       <ul>
         { logs.slice(logs.length - 3).map((log) => (
-          <li key={log}>{log}</li>
+          <li>{log}</li>
         )) }
       </ul>
     </div>
